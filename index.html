@@ -67,36 +67,25 @@
         </div>
     </div>
     <script>
-        // Exact UTC target hours for your noon reset configuration mapping rules
         const trackEvents = [
             { row: 1, type: 'event-reset', startHour: 16.0, durationHours: 1.0 },
             { row: 2, type: 'event-droid', startHour: 12.5, durationHours: 1.0 },
             { row: 3, type: 'event-masquerade', startHour: 13.5, durationHours: 1.0 }
         ];
         const pixelsPerHour = 100;
-
         function buildTimelineTrack() {
             const localBox = document.getElementById('local-headers-container');
             const utcBox = document.getElementById('utc-headers-container');
             const dummyDate = new Date();
-            
-            // Loop drawing continuous 72 hour node chains
             for (let h = -24; h <= 48; h++) {
                 const pixelLeft = (h + 24) * pixelsPerHour;
-                
-                // Let the browser handle standard UTC display values seamlessly
                 const targetUTCHour = (h + 24) % 24;
                 const utcLabelStr = (targetUTCHour < 10 ? '0' : '') + targetUTCHour + ':00 UTC';
-                
-                // Native automated local converter engine avoids hardcoded math bugs
                 dummyDate.setUTCHours(targetUTCHour, 0, 0, 0);
                 const localLabelStr = dummyDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
-
                 localBox.innerHTML += `<div class="time-marker-node" style="left: ${pixelLeft}px">${localLabelStr}</div>`;
                 utcBox.innerHTML += `<div class="time-marker-node" style="left: ${pixelLeft}px">${utcLabelStr}</div>`;
             }
-            
-            // Generate visual canvas activity graphics across blocks loop layout
             trackEvents.forEach(evt => {
                 const targetRowElement = document.getElementById('track-row-' + evt.row);
                 for (let loopDay = -1; loopDay <= 2; loopDay++) {
@@ -110,20 +99,16 @@
                 }
             });
         }
-
         function updateLiveScrollingTracker() {
             const now = new Date();
             document.getElementById('utc-clock').textContent = now.toUTCString().slice(17, 25);
             document.getElementById('local-clock').textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
-            
             const totalElapsedHours = now.getUTCHours() + (now.getUTCMinutes() / 60) + (now.getUTCSeconds() / 3600);
             const currentMomentPixelLocation = (24 + totalElapsedHours) * pixelsPerHour;
-            
             const viewportWindowOffsetWidth = document.querySelector('.scroller-window').offsetWidth;
             const centerAlignmentPixelShift = (viewportWindowOffsetWidth / 2) - currentMomentPixelLocation;
             document.getElementById('moving-belt').style.transform = "translateX(" + centerAlignmentPixelShift + "px)";
         }
-        
         buildTimelineTrack(); updateLiveScrollingTracker(); setInterval(updateLiveScrollingTracker, 1000);
     </script>
 </body>
