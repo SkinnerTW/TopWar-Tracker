@@ -3,208 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Top War Alliance Tracker</title>
+    <title>Alliance Tracker</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background-color: #121824; color: #ffffff; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: #121824; color: #fff; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
         h1 { color: #4dadff; margin-bottom: 5px; font-size: 2.2rem; }
         .clocks-container { display: flex; gap: 20px; margin-bottom: 30px; width: 100%; max-width: 1000px; }
-        .clock-box { flex: 1; background: #1c2638; padding: 18px; border-radius: 8px; text-align: center; border: 1px solid #2c3a52; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .clock-box { flex: 1; background: #1c2638; padding: 18px; border-radius: 8px; text-align: center; border: 1px solid #2c3a52; }
         .clock-label { font-size: 0.95rem; color: #8fa0ba; text-transform: uppercase; margin-bottom: 5px; }
-        .clock-time { font-size: 2.2rem; font-weight: bold; color: #ffffff; }
-        
-        .tracker-container { 
-            width: 100%; 
-            max-width: 1000px; 
-            background: #1c2638; 
-            border-radius: 12px; 
-            padding: 30px; 
-            border: 1px solid #2c3a52; 
-            box-shadow: 0 6px 15px rgba(0,0,0,0.4); 
-            box-sizing: border-box; 
-            position: relative;
-            overflow: hidden; /* Clips the scrolling tracks cleanly */
-        }
-
-        /* OUTER WRAPPER FOR ALIGNING THE SCROLLING VIEW AREA */
-        .scroller-window {
-            position: relative;
-            margin-left: 160px; /* Leave space for stationary left labels */
-            height: auto;
-            overflow: hidden;
-        }
-
-        /* FIXED STATIONARY RED LINE (EXACT MIDDLE, NO TEXT, COMPLETELY INSIDE TRACKS) */
-        .fixed-center-line {
-            position: absolute;
-            left: 50%;
-            top: 0;
-            bottom: 0;
-            width: 3px;
-            background-color: #ff4d4d;
-            box-shadow: 0 0 10px #ff4d4d;
-            z-index: 10;
-            pointer-events: none;
-        }
-
-        /* THE CONVEYER BELT CONTAINER FOR TIMESTAMPS AND EVENTS */
-        .scrolling-content-belt {
-            position: relative;
-            width: 300%; /* Triple size loop ensures smooth seamless movement wrap */
-            display: flex;
-            flex-direction: column;
-        }
-
+        .clock-time { font-size: 2.2rem; font-weight: bold; }
+        .tracker-container { width: 100%; max-width: 1000px; background: #1c2638; border-radius: 12px; padding: 30px; border: 1px solid #2c3a52; position: relative; overflow: hidden; }
+        .scroller-window { position: relative; margin-left: 160px; overflow: hidden; height: 290px; }
+        .fixed-center-line { position: absolute; left: 50%; top: 0; bottom: 0; width: 3px; background-color: #ff4d4d; box-shadow: 0 0 10px #ff4d4d; z-index: 10; }
+        .scrolling-content-belt { position: relative; width: 300%; display: flex; flex-direction: column; }
         .timeline-headers-wrapper { margin-bottom: 15px; position: relative; height: 50px; }
         .timeline-header-row { display: absolute; width: 100%; font-size: 0.85rem; }
         .local-header-row { color: #4dadff; font-weight: bold; }
         .utc-header-row { color: #8fa0ba; margin-top: 24px; }
-        
-        /* Time position markers on the conveyer belt map */
-        .time-marker-node {
-            position: absolute;
-            transform: translateX(-50%);
-            text-align: center;
-            white-space: nowrap;
-            width: 80px;
-        }
-
+        .time-marker-node { position: absolute; transform: translateX(-50%); text-align: center; white-space: nowrap; width: 80px; }
         .rows-stack { display: flex; flex-direction: column; gap: 18px; margin-bottom: 25px; position: relative; }
-        .track-row-outer { display: flex; align-items: center; position: relative; }
-        
-        /* STATIC TEXT LABELS LOCKED ON THE LEFT */
-        .row-label-static { 
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 160px; 
-            height: 60px; 
-            background: #222f44; 
-            display: flex; 
-            align-items: center; 
-            padding-left: 15px; 
-            font-weight: bold; 
-            font-size: 0.95rem; 
-            border: 1px solid #25334a;
-            border-right: 3px solid #2c3a52; 
-            z-index: 15; 
-            box-sizing: border-box;
-            border-radius: 8px 0 0 8px;
-        }
-
-        .track-row-moving-belt { 
-            position: relative; 
-            width: 100%; 
-            height: 60px; 
-            background: #182232; 
-            border-radius: 0 8px 8px 0; 
-            border: 1px solid #25334a; 
-            overflow: visible;
-        }
-
+        .row-label-static { position: absolute; left: 0; width: 160px; height: 60px; background: #222f44; display: flex; align-items: center; padding-left: 15px; font-weight: bold; font-size: 0.95rem; border: 1px solid #25334a; border-right: 3px solid #2c3a52; z-index: 15; box-sizing: border-box; border-radius: 8px 0 0 8px; }
+        .track-row-moving-belt { position: relative; width: 100%; height: 60px; background: #182232; border-radius: 0 8px 8px 0; border: 1px solid #25334a; }
         .event-block { position: absolute; height: 100%; box-sizing: border-box; opacity: 0.85; }
-        .event-reset { background-color: #e67e22; border-left: 2px solid #f39c12; border-right: 2px solid #f39c12; }
-        .event-droid { background-color: #2ecc71; border-left: 2px solid #27ae60; border-right: 2px solid #27ae60; }
-        .event-masquerade { background-color: #9b59b6; border-left: 2px solid #8e44ad; border-right: 2px solid #8e44ad; }
-        
+        .event-reset { background-color: #e67e22; border: 1px solid #f39c12; }
+        .event-droid { background-color: #2ecc71; border: 1px solid #27ae60; }
+        .event-masquerade { background-color: #9b59b6; border: 1px solid #8e44ad; }
         .legend { display: flex; flex-wrap: wrap; gap: 20px; font-size: 0.95rem; margin-top: 15px; border-top: 1px solid #2c3a52; padding-top: 20px; width: 100%; }
         .legend-item { display: flex; align-items: center; gap: 8px; }
         .legend-color { width: 18px; height: 18px; border-radius: 4px; }
     </style>
 </head>
 <body>
-
     <h1>Alliance Event Tracker</h1>
     <p style="color: #8fa0ba; margin-top: 0; margin-bottom: 25px;">Real-time schedule for Top War</p>
-
-    <!-- CLOCKS -->
     <div class="clocks-container">
         <div class="clock-box"><div class="clock-label">Server Time (UTC)</div><div class="clock-time" id="utc-clock">00:00:00</div></div>
         <div class="clock-box"><div class="clock-label">Your Local Time</div><div class="clock-time" id="local-clock">12:00:00 AM</div></div>
     </div>
-
-    <!-- TRACKER CONTAINER -->
     <div class="tracker-container">
-        
-        <!-- LEFT STATIC LABELS -->
         <div class="row-label-static" style="top: 105px;">Server Reset</div>
         <div class="row-label-static" style="top: 183px;">Alliance Droid</div>
         <div class="row-label-static" style="top: 261px;">Masquerade Boss</div>
-
-        <!-- THE SCROLLING VIEW WINDOW ZONE -->
         <div class="scroller-window">
-            
-            <!-- STATIC CENTER RED LINE -->
             <div class="fixed-center-line"></div>
-
-            <!-- THE CONVEYER BELT TRACKS -->
             <div class="scrolling-content-belt" id="moving-belt">
-                
-                <!-- SCROLLING TIME HEADERS -->
                 <div class="timeline-headers-wrapper">
                     <div class="timeline-header-row local-header-row" id="local-headers-container"></div>
                     <div class="timeline-header-row utc-header-row" id="utc-headers-container"></div>
                 </div>
-
                 <div class="rows-stack">
-                    <!-- TRACK ROW 1 -->
                     <div class="track-row-moving-belt" id="track-row-1"></div>
-                    <!-- TRACK ROW 2 -->
                     <div class="track-row-moving-belt" id="track-row-2"></div>
-                    <!-- TRACK ROW 3 -->
                     <div class="track-row-moving-belt" id="track-row-3"></div>
                 </div>
-
             </div>
         </div>
-
-        <!-- LEGEND CONTAINER -->
         <div class="legend">
             <div class="legend-item"><div class="legend-color event-reset"></div><span>Server Reset (12:00 PM Eastern)</span></div>
             <div class="legend-item"><div class="legend-color event-droid"></div><span>Alliance Droid (8:30 AM Eastern)</span></div>
             <div class="legend-item"><div class="legend-color event-masquerade"></div><span>Masquerade Boss (9:30 AM Eastern)</span></div>
         </div>
     </div>
-
     <script>
-        // CONFIGURING TARGET EVENTS BASES USING IN-GAME TIME POSITIONING
         const trackEvents = [
-            { row: 1, type: 'event-reset', startHour: 16.0, durationHours: 1.0 },   // Reset 16:00 UTC
-            { row: 2, type: 'event-droid', startHour: 12.5, durationHours: 1.0 },   // Droid 12:30 UTC
-            { row: 3, type: 'event-masquerade', startHour: 13.5, durationHours: 1.0 } // Masquerade 13:30 UTC
+            { row: 1, type: 'event-reset', startHour: 16.0, durationHours: 1.0 },
+            { row: 2, type: 'event-droid', startHour: 12.5, durationHours: 1.0 },
+            { row: 3, type: 'event-masquerade', startHour: 13.5, durationHours: 1.0 }
         ];
-
-        // SETUP MAP TIMELINE LAYOUT NODE FRAMES
         function buildTimelineTrack() {
             const localBox = document.getElementById('local-headers-container');
             const utcBox = document.getElementById('utc-headers-container');
-            
-            // Build a 48 hour block loop array sequence for seamless side scrolling
             for (let h = -24; h <= 48; h++) {
                 const utcHourVal = (h + 24) % 24;
-                let localHourVal = utcHourVal - 4; // Eastern Time adjustment
+                let localHourVal = utcHourVal - 4;
                 if (localHourVal < 0) localHourVal += 24;
-
                 const utcLabelStr = (utcHourVal < 10 ? '0' : '') + utcHourVal + ':00 UTC';
-                
                 let ampm = localHourVal >= 12 ? 'PM' : 'AM';
                 let displayLocalHour = localHourVal % 12;
                 if (displayLocalHour === 0) displayLocalHour = 12;
                 const localLabelStr = displayLocalHour + ':00 ' + ampm;
-
                 const leftPercentPosition = ((h + 24) / 24) * 100;
-
-                // Add time mark tags
                 localBox.innerHTML += `<div class="time-marker-node" style="left: ${leftPercentPosition}%">${localLabelStr}</div>`;
                 utcBox.innerHTML += `<div class="time-marker-node" style="left: ${leftPercentPosition}%">${utcLabelStr}</div>`;
             }
-
-            // Populate the target colorful event bars across the layout maps loop
             trackEvents.forEach(evt => {
                 const targetRowElement = document.getElementById('track-row-' + evt.row);
                 for (let loopDay = -1; loopDay <= 2; loopDay++) {
                     const blockLeftPercent = (((evt.startHour + (loopDay * 24)) + 24) / 24) * 100;
                     const blockWidthPercent = (evt.durationHours / 24) * 100;
-                    
                     const blockMarkup = document.createElement('div');
                     blockMarkup.className = `event-block ${evt.type}`;
                     blockMarkup.style.left = blockLeftPercent + '%';
@@ -213,40 +98,15 @@
                 }
             });
         }
-
         function updateLiveScrollingTracker() {
             const now = new Date();
-                    function updateLiveScrollingTracker() {
-            const now = new Date();
-            
-            // 1. Digital Clock Interface Syncing
             document.getElementById('utc-clock').textContent = now.toUTCString().slice(17, 25);
-            
-            document.getElementById('local-clock').textContent = now.toLocaleTimeString([], { 
-                hour: '2-digit', 
-                minute: '2-digit', 
-                second: '2-digit', 
-                hour12: true 
-            });
-
-            // 2. Map Shift Conveyer Belt Calculations
-            const currentUTCHours = now.getUTCHours();
-            const currentUTCMinutes = now.getUTCMinutes();
-            const currentUTCSeconds = now.getUTCSeconds();
-            
-            const totalElapsedDaySeconds = (currentUTCHours * 3600) + (currentUTCMinutes * 60) + currentUTCSeconds;
-            const fullDaySeconds = 24 * 60 * 60;
-            
-            // Calculate where the current time sits as a percentage
-            const timePassedPercent = (totalElapsedDaySeconds / fullDaySeconds) * 100;
-            
-            // Shift percentage calculation for centering
-            const calculatedShiftOffset = 50 - (100 + timePassedPercent);
-            
-            // Apply horizontal transform movement wrapper
+            document.getElementById('local-clock').textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
+            const totalElapsedDaySeconds = (now.getUTCHours() * 3600) + (now.getUTCMinutes() * 60) + now.getUTCSeconds();
+            const calculatedShiftOffset = 50 - (100 + ((totalElapsedDaySeconds / 86400) * 100));
             document.getElementById('moving-belt').style.transform = "translateX(" + calculatedShiftOffset + "%)";
         }
-
-        buildTimelineTrack();
-        updateLiveScrollingTracker();
-        setInterval(updateLiveScrollingTracker, 1000);
+        buildTimelineTrack(); updateLiveScrollingTracker(); setInterval(updateLiveScrollingTracker, 1000);
+    </script>
+</body>
+</html>
