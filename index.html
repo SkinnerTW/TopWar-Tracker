@@ -34,7 +34,7 @@
     </style>
 </head>
 <body>
-    <h1>Alliance Event Tracker</h1>
+    <h1>[YOUR ALLIANCE NAME] Event Tracker</h1>
     <p style="color: #8fa0ba; margin-top: 0; margin-bottom: 25px;">Real-time schedule for Top War</p>
     <div class="clocks-container">
         <div class="clock-box"><div class="clock-label">Server Time (UTC)</div><div class="clock-time" id="utc-clock">00:00:00</div></div>
@@ -61,17 +61,16 @@
             </div>
         </div>
         <div class="legend">
-            <div class="legend-item"><div class="legend-color event-reset"></div><span>Server Reset</span></div>
-            <div class="legend-item"><div class="legend-color event-droid"></div><span>Alliance Droid</span></div>
-            <div class="legend-item"><div class="legend-color event-masquerade"></div><span>Masquerade Boss</span></div>
+            <div class="legend-item"><div class="legend-color event-reset"></div><span>Server Reset (12:00 PM Eastern)</span></div>
+            <div class="legend-item"><div class="legend-color event-droid"></div><span>Alliance Droid (8:30 AM Eastern)</span></div>
+            <div class="legend-item"><div class="legend-color event-masquerade"></div><span>Masquerade Boss (9:30 AM Eastern)</span></div>
         </div>
     </div>
     <script>
-        // TEST TIMES FOR MIDNIGHT ROUTINE TO ENSURE THEY FIT IN VIEWPORT
         const trackEvents = [
             { row: 1, type: 'event-reset', startHour: 16.0, durationHours: 1.0 },
-            { row: 2, type: 'event-droid', startHour: 6.5, durationHours: 1.0 },       // Moved to 6:30 AM UTC
-            { row: 3, type: 'event-masquerade', startHour: 7.5, durationHours: 1.0 }  // Moved to 7:30 AM UTC
+            { row: 2, type: 'event-droid', startHour: 12.5, durationHours: 1.0 },
+            { row: 3, type: 'event-masquerade', startHour: 13.5, durationHours: 1.0 }
         ];
         const pixelsPerHour = 100;
         function buildTimelineTrack() {
@@ -107,7 +106,7 @@
             const totalElapsedHours = now.getUTCHours() + (now.getUTCMinutes() / 60) + (now.getUTCSeconds() / 3600);
             const currentMomentPixelLocation = (24 + totalElapsedHours) * pixelsPerHour;
             const viewportWindowOffsetWidth = document.querySelector('.scroller-window').offsetWidth;
-            const centerAlignmentPixelShift = (viewportWindowOffsetWidth / 2) - currentMomentMomentPixelLocation || (viewportWindowOffsetWidth / 2) - currentMomentPixelLocation;
+            const centerAlignmentPixelShift = (viewportWindowOffsetWidth / 2) - currentMomentPixelLocation;
             document.getElementById('moving-belt').style.transform = "translateX(" + centerAlignmentPixelShift + "px)";
         }
         buildTimelineTrack(); updateLiveScrollingTracker(); setInterval(updateLiveScrollingTracker, 1000);
