@@ -15,8 +15,11 @@
         .labels-column-static { position: absolute; left: 30px; top: 110px; width: 160px; display: flex; flex-direction: column; gap: 18px; z-index: 15; }
         .row-label-static { width: 160px; height: 60px; background: #222f44; display: flex; align-items: center; padding-left: 15px; font-weight: bold; font-size: 0.95rem; border: 1px solid #25334a; border-right: 3px solid #2c3a52; box-sizing: border-box; border-radius: 8px 0 0 8px; }
         .scroller-window { position: relative; margin-left: 160px; overflow: hidden; height: 305px; border-radius: 0 8px 8px 0; border: 1px solid #25334a; background: #151d2a; }
-        .fixed-center-line { position: absolute; left: 50%; top: 50px; height: 216px; width: 3px; background-color: #ff4d4d; box-shadow: 0 0 10px #ff4d4d; z-index: 20; pointer-events: none; }
-        .scrolling-content-belt { position: relative; width: 4800px; height: 100%; display: flex; flex-direction: column; }
+        
+        /* SHIFTED RED TIMELINE BAR DOWN TO STAY STRICTLY INSIDE EVENT ROWS */
+        .fixed-center-line { position: absolute; left: 50%; top: 65px; height: 216px; width: 3px; background-color: #ff4d4d; box-shadow: 0 0 10px #ff4d4d; z-index: 20; pointer-events: none; }
+        
+        .scrolling-content-belt { position: relative; width: 7200px; height: 100%; display: flex; flex-direction: column; }
         .timeline-headers-wrapper { margin-bottom: 15px; position: relative; height: 50px; background: #1c2638; border-bottom: 1px solid #2c3a52; }
         .timeline-header-row { position: absolute; width: 100%; font-size: 0.85rem; }
         .local-header-row { color: #4dadff; font-weight: bold; top: 4px; }
@@ -76,7 +79,9 @@
         function buildTimelineTrack() {
             const localBox = document.getElementById('local-headers-container');
             const utcBox = document.getElementById('utc-headers-container');
-            for (let h = -12; h <= 36; h++) {
+            
+            // Expanded index window bounds loop from -24 to 48 hours for infinite display coverage
+            for (let h = -24; h <= 48; h++) {
                 const utcHourVal = (h + 24) % 24;
                 let localHourVal = utcHourVal - 4;
                 if (localHourVal < 0) localHourVal += 24;
@@ -85,14 +90,16 @@
                 let displayLocalHour = localHourVal % 12;
                 if (displayLocalHour === 0) displayLocalHour = 12;
                 const localLabelStr = displayLocalHour + ':00 ' + ampm;
-                const pixelLeft = (h + 12) * pixelsPerHour;
+                const pixelLeft = (h + 24) * pixelsPerHour;
                 localBox.innerHTML += `<div class="time-marker-node" style="left: ${pixelLeft}px">${localLabelStr}</div>`;
                 utcBox.innerHTML += `<div class="time-marker-node" style="left: ${pixelLeft}px">${utcLabelStr}</div>`;
             }
+            
+            // Expanded array loops to drop structural colors into the timeline view securely
             trackEvents.forEach(evt => {
                 const targetRowElement = document.getElementById('track-row-' + evt.row);
-                for (let loopDay = -1; loopDay <= 1; loopDay++) {
-                    const blockLeftPixel = ((evt.startHour + (loopDay * 24)) + 12) * pixelsPerHour;
+                for (let loopDay = -1; loopDay <= 2; loopDay++) {
+                    const blockLeftPixel = ((evt.startHour + (loopDay * 24)) + 24) * pixelsPerHour;
                     const blockWidthPixel = evt.durationHours * pixelsPerHour;
                     const blockMarkup = document.createElement('div');
                     blockMarkup.className = `event-block ${evt.type}`;
@@ -107,7 +114,7 @@
             document.getElementById('utc-clock').textContent = now.toUTCString().slice(17, 25);
             document.getElementById('local-clock').textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
             const totalElapsedHours = now.getUTCHours() + (now.getUTCMinutes() / 60) + (now.getUTCSeconds() / 3600);
-            const currentMomentPixelLocation = (12 + totalElapsedHours) * pixelsPerHour;
+            const currentMomentPixelLocation = (24 + totalElapsedHours) * pixelsPerHour;
             const viewportWindowOffsetWidth = document.querySelector('.scroller-window').offsetWidth;
             const centerAlignmentPixelShift = (viewportWindowOffsetWidth / 2) - currentMomentPixelLocation;
             document.getElementById('moving-belt').style.transform = "translateX(" + centerAlignmentPixelShift + "px)";
