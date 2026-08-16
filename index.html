@@ -62,7 +62,7 @@
             border: 1px solid #2c3a52;
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
             box-sizing: border-box;
-            position: relative; /* Crucial for the red line to position correctly */
+            position: relative;
         }
 
         .timeline-header {
@@ -74,16 +74,14 @@
             padding: 0 5px;
         }
 
-        /* The container for all rows */
         .rows-stack {
             position: relative;
             display: flex;
             flex-direction: column;
-            gap: 12px; /* Spaces the rows apart neatly */
+            gap: 12px;
             margin-bottom: 20px;
         }
 
-        /* Individual track row styling */
         .track-row {
             position: relative;
             width: 100%;
@@ -93,16 +91,15 @@
             border: 1px solid #25334a;
         }
 
-        /* The moving indicator line that passes through all rows */
         .now-line {
             position: absolute;
-            top: -25px; /* Reaches up to the label */
-            bottom: 0;   /* Stretches to the bottom of the stack */
+            top: -25px;
+            bottom: 0;
             width: 3px;
             background-color: #ff4d4d;
             z-index: 10;
             box-shadow: 0 0 8px #ff4d4d;
-            pointer-events: none; /* Stops it from blocking clicks */
+            pointer-events: none;
         }
 
         .now-label {
@@ -193,19 +190,19 @@
                 <div class="now-label">SERVER NOW</div>
             </div>
 
-            <!-- ROW 1: Server Reset (00:00 - 01:00 UTC) -->
+            <!-- ROW 1: Server Reset (16:00 UTC / 12:00 PM Eastern) -->
             <div class="track-row">
-                <div class="event-block event-reset" style="left: 0%; width: 4.16%;">Reset</div>
+                <div class="event-block event-reset" style="left: 66.66%; width: 4.16%;">Reset (12:00 PM Local)</div>
             </div>
 
-            <!-- ROW 2: Alliance Droid (12:00 - 13:00 UTC Placeholder) -->
+            <!-- ROW 2: Alliance Droid (12:30 UTC / 8:30 AM Eastern) -->
             <div class="track-row">
-                <div class="event-block event-droid" style="left: 50%; width: 4.16%;">Alliance Droid</div>
+                <div class="event-block event-droid" style="left: 52.08%; width: 2.08%;">Alliance Droid (8:30 AM Local)</div>
             </div>
 
-            <!-- ROW 3: Masquerade Boss (18:00 - 19:30 UTC Placeholder) -->
+            <!-- ROW 3: Masquerade Boss (13:30 UTC / 9:30 AM Eastern) -->
             <div class="track-row">
-                <div class="event-block event-masquerade" style="left: 75%; width: 6.25%;">Masquerade Boss</div>
+                <div class="event-block event-masquerade" style="left: 56.25%; width: 2.08%;">Masquerade Boss (9:30 AM Local)</div>
             </div>
         </div>
 
@@ -217,11 +214,11 @@
             </div>
             <div class="legend-item">
                 <div class="legend-color event-droid"></div>
-                <span>Alliance Droid</span>
+                <span>Alliance Droid (Reset - 3:30)</span>
             </div>
             <div class="legend-item">
                 <div class="legend-color event-masquerade"></div>
-                <span>Masquerade Boss</span>
+                <span>Masquerade Boss (Reset - 2:30)</span>
             </div>
         </div>
     </div>
