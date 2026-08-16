@@ -19,6 +19,7 @@
         h1 {
             color: #4dadff;
             margin-bottom: 5px;
+            font-size: 2.2rem;
         }
 
         .clocks-container {
@@ -26,13 +27,13 @@
             gap: 20px;
             margin-bottom: 30px;
             width: 100%;
-            max-width: 800px;
+            max-width: 1000px; /* Made wider to match graph */
         }
 
         .clock-box {
             flex: 1;
             background: #1c2638;
-            padding: 15px;
+            padding: 18px;
             border-radius: 8px;
             text-align: center;
             border: 1px solid #2c3a52;
@@ -40,7 +41,7 @@
         }
 
         .clock-label {
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             color: #8fa0ba;
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -48,19 +49,20 @@
         }
 
         .clock-time {
-            font-size: 1.8rem;
+            font-size: 2.2rem; /* Made clocks slightly larger */
             font-weight: bold;
             color: #ffffff;
         }
 
+        /* ENLARGED GRAPH CONTAINER */
         .tracker-container {
             width: 100%;
-            max-width: 800px;
+            max-width: 1000px; /* Increased from 800px to 1000px for extra width */
             background: #1c2638;
-            border-radius: 8px;
-            padding: 20px;
+            border-radius: 12px;
+            padding: 30px; /* Increased internal padding */
             border: 1px solid #2c3a52;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.4);
             box-sizing: border-box;
             position: relative;
         }
@@ -69,28 +71,59 @@
             display: flex;
             justify-content: space-between;
             color: #8fa0ba;
-            font-size: 0.8rem;
-            margin-bottom: 15px;
-            padding: 0 5px;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            /* Offset header text slightly to align with the active timeline track area */
+            padding-left: 175px; 
+            padding-right: 10px;
         }
 
         .rows-stack {
             position: relative;
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            margin-bottom: 20px;
+            gap: 18px; /* Added more space between rows */
+            margin-bottom: 25px;
         }
 
+        /* ENLARGED ROW LAYOUT */
         .track-row {
             position: relative;
             width: 100%;
-            height: 45px;
+            height: 60px; /* Increased height from 45px to 60px */
             background: #182232;
-            border-radius: 6px;
+            border-radius: 8px;
             border: 1px solid #25334a;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
         }
 
+        /* STATIONARY TEXT LABELS ON THE LEFT */
+        .row-label {
+            width: 160px; /* Fixed width so all tracks align perfectly */
+            min-width: 160px;
+            height: 100%;
+            background: #222f44;
+            display: flex;
+            align-items: center;
+            padding-left: 15px;
+            font-weight: bold;
+            font-size: 0.95rem;
+            color: #ffffff;
+            border-right: 2px solid #2c3a52;
+            z-index: 5; /* Keeps labels on top of moving blocks */
+            box-sizing: border-box;
+        }
+
+        /* THE VISUAL TIMELINE TRACK AREA */
+        .track-timeline-area {
+            position: relative;
+            flex-grow: 1;
+            height: 100%;
+        }
+
+        /* GLOBAL RED TIMELINE BAR */
         .now-line {
             position: absolute;
             top: -25px;
@@ -98,7 +131,7 @@
             width: 3px;
             background-color: #ff4d4d;
             z-index: 10;
-            box-shadow: 0 0 8px #ff4d4d;
+            box-shadow: 0 0 10px #ff4d4d;
             pointer-events: none;
         }
 
@@ -108,52 +141,47 @@
             transform: translateX(-50%);
             background: #ff4d4d;
             color: white;
-            padding: 2px 6px;
+            padding: 3px 8px;
             border-radius: 4px;
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             font-weight: bold;
             white-space: nowrap;
         }
 
+        /* SIMPLIFIED VISUAL BLOCKS (WITHOUT OVERLAPPING TEXT) */
         .event-block {
             position: absolute;
             height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 0.85rem;
-            color: white;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.6);
-            border-radius: 5px;
+            border-radius: 0px; /* Square edges look cleaner inside the rows */
             box-sizing: border-box;
+            opacity: 0.85;
         }
 
         /* Color profiles */
-        .event-reset { background-color: #e67e22; border: 1px solid #f39c12; }
-        .event-droid { background-color: #2ecc71; border: 1px solid #27ae60; }
-        .event-masquerade { background-color: #9b59b6; border: 1px solid #8e44ad; }
+        .event-reset { background-color: #e67e22; border-left: 2px solid #f39c12; border-right: 2px solid #f39c12; }
+        .event-droid { background-color: #2ecc71; border-left: 2px solid #27ae60; border-right: 2px solid #27ae60; }
+        .event-masquerade { background-color: #9b59b6; border-left: 2px solid #8e44ad; border-right: 2px solid #8e44ad; }
 
         .legend {
             display: flex;
             flex-wrap: wrap;
-            gap: 15px;
-            font-size: 0.9rem;
-            margin-top: 10px;
+            gap: 20px;
+            font-size: 0.95rem;
+            margin-top: 15px;
             border-top: 1px solid #2c3a52;
-            padding-top: 15px;
+            padding-top: 20px;
         }
 
         .legend-item {
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 8px;
         }
 
         .legend-color {
-            width: 15px;
-            height: 15px;
-            border-radius: 3px;
+            width: 18px;
+            height: 18px;
+            border-radius: 4px;
         }
     </style>
 </head>
@@ -185,24 +213,36 @@
         </div>
 
         <div class="rows-stack">
-            <!-- Global Moving Tracker Line -->
-            <div class="now-line" id="now-indicator">
-                <div class="now-label">SERVER NOW</div>
+            
+            <!-- Global Moving Tracker Line (Wrapped inside a helper to align with the timeline area) -->
+            <div style="position: absolute; left: 160px; right: 0; top: 0; bottom: 0; pointer-events: none;">
+                <div class="now-line" id="now-indicator">
+                    <div class="now-label">SERVER NOW</div>
+                </div>
             </div>
 
-            <!-- ROW 1: Server Reset (16:00 UTC / 12:00 PM Eastern) -->
+            <!-- ROW 1: Server Reset -->
             <div class="track-row">
-                <div class="event-block event-reset" style="left: 66.66%; width: 4.16%;">Reset (12:00 PM Local)</div>
+                <div class="row-label">Server Reset</div>
+                <div class="track-timeline-area">
+                    <div class="event-block event-reset" style="left: 66.66%; width: 4.16%;"></div>
+                </div>
             </div>
 
-            <!-- ROW 2: Alliance Droid (12:30 UTC / 8:30 AM Eastern) -->
+            <!-- ROW 2: Alliance Droid -->
             <div class="track-row">
-                <div class="event-block event-droid" style="left: 52.08%; width: 2.08%;">Alliance Droid (8:30 AM Local)</div>
+                <div class="row-label">Alliance Droid</div>
+                <div class="track-timeline-area">
+                    <div class="event-block event-droid" style="left: 52.08%; width: 4.16%;"></div>
+                </div>
             </div>
 
-            <!-- ROW 3: Masquerade Boss (13:30 UTC / 9:30 AM Eastern) -->
+            <!-- ROW 3: Masquerade Boss -->
             <div class="track-row">
-                <div class="event-block event-masquerade" style="left: 56.25%; width: 2.08%;">Masquerade Boss (9:30 AM Local)</div>
+                <div class="row-label">Masquerade Boss</div>
+                <div class="track-timeline-area">
+                    <div class="event-block event-masquerade" style="left: 56.25%; width: 4.16%;"></div>
+                </div>
             </div>
         </div>
 
@@ -210,15 +250,15 @@
         <div class="legend">
             <div class="legend-item">
                 <div class="legend-color event-reset"></div>
-                <span>Server Reset</span>
+                <span>Server Reset (12:00 PM Eastern)</span>
             </div>
             <div class="legend-item">
                 <div class="legend-color event-droid"></div>
-                <span>Alliance Droid (Reset - 3:30)</span>
+                <span>Alliance Droid (8:30 AM Eastern / Reset - 3:30)</span>
             </div>
             <div class="legend-item">
                 <div class="legend-color event-masquerade"></div>
-                <span>Masquerade Boss (Reset - 2:30)</span>
+                <span>Masquerade Boss (9:30 AM Eastern / Reset - 2:30)</span>
             </div>
         </div>
     </div>
