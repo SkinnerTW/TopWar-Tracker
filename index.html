@@ -11,46 +11,24 @@
         .clock-box { flex: 1; background: #1c2638; padding: 18px; border-radius: 8px; text-align: center; border: 1px solid #2c3a52; }
         .clock-label { font-size: 0.95rem; color: #8fa0ba; text-transform: uppercase; margin-bottom: 5px; }
         .clock-time { font-size: 2.2rem; font-weight: bold; }
-        
-        .tracker-container { width: 100%; max-width: 1000px; background: #1c2638; border-radius: 12px; padding: 30px; border: 1px solid #2c3a52; position: relative; overflow: hidden; }
-        
-        /* STATIC Left Row Labels */
-        .row-label-static { position: absolute; left: 30px; width: 160px; height: 60px; background: #222f44; display: flex; align-items: center; padding-left: 15px; font-weight: bold; font-size: 0.95rem; border: 1px solid #25334a; border-right: 3px solid #2c3a52; z-index: 15; box-sizing: border-box; border-radius: 8px 0 0 8px; }
-        
-        /* SCROLLER WINDOW WINDOW CONTAINER FRAME */
-        .scroller-window { position: relative; margin-left: 160px; overflow: hidden; height: 290px; }
-        
-        /* LOCKED RED LINE - POSITIONED STRICTLY ON OUTER FRAME */
-        .fixed-center-line { 
-            position: absolute; 
-            left: 50%; 
-            top: 50px; /* Aligns exactly with the top edge of Row 1 */
-            height: 216px; /* Spans perfectly across all 3 rows and finishes at the bottom of Row 3 */
-            width: 3px; 
-            background-color: #ff4d4d; 
-            box-shadow: 0 0 10px #ff4d4d; 
-            z-index: 20; 
-            pointer-events: none;
-        }
-        
-        /* CONVEYER BELT TRACK */
-        .scrolling-content-belt { position: relative; width: 2400px; display: flex; flex-direction: column; }
-        
-        .timeline-headers-wrapper { margin-bottom: 15px; position: relative; height: 50px; }
-        .timeline-header-row { display: absolute; width: 100%; font-size: 0.85rem; }
-        .local-header-row { color: #4dadff; font-weight: bold; }
-        .utc-header-row { color: #8fa0ba; margin-top: 24px; }
-        .time-marker-node { position: absolute; transform: translateX(-50%); text-align: center; white-space: nowrap; width: 80px; }
-        
-        .rows-stack { display: flex; flex-direction: column; gap: 18px; margin-bottom: 25px; position: relative; }
-        .track-row-moving-belt { position: relative; width: 100%; height: 60px; background: #182232; border-radius: 0 8px 8px 0; border: 1px solid #25334a; }
-        
+        .tracker-container { width: 100%; max-width: 1000px; background: #1c2638; border-radius: 12px; padding: 30px; border: 1px solid #2c3a52; position: relative; box-sizing: border-box; }
+        .labels-column-static { position: absolute; left: 30px; top: 110px; width: 160px; display: flex; flex-direction: column; gap: 18px; z-index: 15; }
+        .row-label-static { width: 160px; height: 60px; background: #222f44; display: flex; align-items: center; padding-left: 15px; font-weight: bold; font-size: 0.95rem; border: 1px solid #25334a; border-right: 3px solid #2c3a52; box-sizing: border-box; border-radius: 8px 0 0 8px; }
+        .scroller-window { position: relative; margin-left: 160px; overflow: hidden; height: 305px; border-radius: 0 8px 8px 0; border: 1px solid #25334a; background: #151d2a; }
+        .fixed-center-line { position: absolute; left: 50%; top: 50px; height: 216px; width: 3px; background-color: #ff4d4d; box-shadow: 0 0 10px #ff4d4d; z-index: 20; pointer-events: none; }
+        .scrolling-content-belt { position: relative; width: 4800px; height: 100%; display: flex; flex-direction: column; }
+        .timeline-headers-wrapper { margin-bottom: 15px; position: relative; height: 50px; background: #1c2638; border-bottom: 1px solid #2c3a52; }
+        .timeline-header-row { position: absolute; width: 100%; font-size: 0.85rem; }
+        .local-header-row { color: #4dadff; font-weight: bold; top: 4px; }
+        .utc-header-row { color: #8fa0ba; top: 26px; }
+        .time-marker-node { position: absolute; transform: translateX(-50%); text-align: center; white-space: nowrap; width: 100px; }
+        .rows-stack { display: flex; flex-direction: column; gap: 18px; position: relative; padding-top: 2px; }
+        .track-row-moving-belt { position: relative; width: 100%; height: 60px; background: #182232; border-bottom: 1px solid #232e40; }
         .event-block { position: absolute; height: 100%; box-sizing: border-box; opacity: 0.85; }
-        .event-reset { background-color: #e67e22; border: 1px solid #f39c12; }
-        .event-droid { background-color: #2ecc71; border: 1px solid #27ae60; }
-        .event-masquerade { background-color: #9b59b6; border: 1px solid #8e44ad; }
-        
-        .legend { display: flex; flex-wrap: wrap; gap: 20px; font-size: 0.95rem; margin-top: 15px; border-top: 1px solid #2c3a52; padding-top: 20px; width: 100%; }
+        .event-reset { background-color: #e67e22; border-left: 2px solid #f39c12; border-right: 2px solid #f39c12; }
+        .event-droid { background-color: #2ecc71; border-left: 2px solid #27ae60; border-right: 2px solid #27ae60; }
+        .event-masquerade { background-color: #9b59b6; border-left: 2px solid #8e44ad; border-right: 2px solid #8e44ad; }
+        .legend { display: flex; flex-wrap: wrap; gap: 20px; font-size: 0.95rem; margin-top: 25px; border-top: 1px solid #2c3a52; padding-top: 20px; width: 100%; }
         .legend-item { display: flex; align-items: center; gap: 8px; }
         .legend-color { width: 18px; height: 18px; border-radius: 4px; }
     </style>
@@ -63,15 +41,13 @@
         <div class="clock-box"><div class="clock-label">Your Local Time</div><div class="clock-time" id="local-clock">12:00:00 AM</div></div>
     </div>
     <div class="tracker-container">
-        <!-- FIXED Left Side Row Labels -->
-        <div class="row-label-static" style="top: 130px;">Server Reset</div>
-        <div class="row-label-static" style="top: 208px;">Alliance Droid</div>
-        <div class="row-label-static" style="top: 286px;">Masquerade Boss</div>
-        
+        <div class="labels-column-static">
+            <div class="row-label-static">Server Reset</div>
+            <div class="row-label-static">Alliance Droid</div>
+            <div class="row-label-static">Masquerade Boss</div>
+        </div>
         <div class="scroller-window">
-            <!-- STATIONARY STATIC MIDDLE LINE LOCKED INSIDE VIEW WINDOW -->
             <div class="fixed-center-line"></div>
-            
             <div class="scrolling-content-belt" id="moving-belt">
                 <div class="timeline-headers-wrapper">
                     <div class="timeline-header-row local-header-row" id="local-headers-container"></div>
@@ -91,45 +67,33 @@
         </div>
     </div>
     <script>
-        // Server times mapped accurately in UTC Hours
         const trackEvents = [
             { row: 1, type: 'event-reset', startHour: 16.0, durationHours: 1.0 },
             { row: 2, type: 'event-droid', startHour: 12.5, durationHours: 1.0 },
             { row: 3, type: 'event-masquerade', startHour: 13.5, durationHours: 1.0 }
         ];
-
-        const pixelsPerHour = 100; // Explicit horizontal spacing scaling rules
-
+        const pixelsPerHour = 100;
         function buildTimelineTrack() {
             const localBox = document.getElementById('local-headers-container');
             const utcBox = document.getElementById('utc-headers-container');
-            
-            // Build continuous map layout sequence nodes loop spanning across 3 full loop days
-            for (let h = -24; h <= 48; h++) {
+            for (let h = -12; h <= 36; h++) {
                 const utcHourVal = (h + 24) % 24;
-                let localHourVal = utcHourVal - 4; // Eastern Time adjustment
+                let localHourVal = utcHourVal - 4;
                 if (localHourVal < 0) localHourVal += 24;
-                
                 const utcLabelStr = (utcHourVal < 10 ? '0' : '') + utcHourVal + ':00 UTC';
                 let ampm = localHourVal >= 12 ? 'PM' : 'AM';
                 let displayLocalHour = localHourVal % 12;
                 if (displayLocalHour === 0) displayLocalHour = 12;
                 const localLabelStr = displayLocalHour + ':00 ' + ampm;
-                
-                // Position calculations using direct explicit pixel offsets
-                const pixelLeft = (h + 24) * pixelsPerHour;
-                
+                const pixelLeft = (h + 12) * pixelsPerHour;
                 localBox.innerHTML += `<div class="time-marker-node" style="left: ${pixelLeft}px">${localLabelStr}</div>`;
                 utcBox.innerHTML += `<div class="time-marker-node" style="left: ${pixelLeft}px">${utcLabelStr}</div>`;
             }
-
-            // Loop stamping the physical tracking bar positions continuously 24/7 across the tracks
             trackEvents.forEach(evt => {
                 const targetRowElement = document.getElementById('track-row-' + evt.row);
-                for (let loopDay = -1; loopDay <= 2; loopDay++) {
-                    const blockLeftPixel = (evt.startHour + (loopDay * 24) + 24) * pixelsPerHour;
+                for (let loopDay = -1; loopDay <= 1; loopDay++) {
+                    const blockLeftPixel = ((evt.startHour + (loopDay * 24)) + 12) * pixelsPerHour;
                     const blockWidthPixel = evt.durationHours * pixelsPerHour;
-                    
                     const blockMarkup = document.createElement('div');
                     blockMarkup.className = `event-block ${evt.type}`;
                     blockMarkup.style.left = blockLeftPixel + 'px';
@@ -138,30 +102,17 @@
                 }
             });
         }
-
         function updateLiveScrollingTracker() {
             const now = new Date();
             document.getElementById('utc-clock').textContent = now.toUTCString().slice(17, 25);
             document.getElementById('local-clock').textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
-            
-            const currentUTCHours = now.getUTCHours();
-            const currentUTCMinutes = now.getUTCMinutes();
-            const currentUTCSeconds = now.getUTCSeconds();
-            
-            // Total explicit scale hours elapsed in current UTC day frame loop
-            const totalElapsedHours = currentUTCHours + (currentUTCMinutes / 60) + (currentUTCSeconds / 3600);
-            
-            // Calculate pixel position of the current time on our map track scale
-            const currentMomentPixelLocation = (24 + totalElapsedHours) * pixelsPerHour;
-            
-            // Find viewport window half size width measurements to center perfectly around 50%
+            const totalElapsedHours = now.getUTCHours() + (now.getUTCMinutes() / 60) + (now.getUTCSeconds() / 3600);
+            const currentMomentPixelLocation = (12 + totalElapsedHours) * pixelsPerHour;
             const viewportWindowOffsetWidth = document.querySelector('.scroller-window').offsetWidth;
-            const absoluteCenterAlignmentPixelShift = (viewportWindowOffsetWidth / 2) - currentMomentPixelLocation;
-            
-            document.getElementById('moving-belt').style.transform = "translateX(" + absoluteCenterAlignmentPixelShift + "px)";
+            const centerAlignmentPixelShift = (viewportWindowOffsetWidth / 2) - currentMomentPixelLocation;
+            document.getElementById('moving-belt').style.transform = "translateX(" + centerAlignmentPixelShift + "px)";
         }
-
-        buildTimelineTrack(); 
-        updateLiveScrollingTracker(); 
-        setInterval(updateLiveScrollingTracker, 1000);
+        buildTimelineTrack(); updateLiveScrollingTracker(); setInterval(updateLiveScrollingTracker, 1000);
     </script>
+</body>
+</html>
